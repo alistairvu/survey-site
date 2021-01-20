@@ -11,7 +11,6 @@ const getRandomQuestion = (request: any, response: any) => {
   const index: number = Math.floor(Math.random() * data.length)
   const question: Question = data[index]
 
-  response.status(200)
   response.send({
     success: true,
     data: question,
@@ -45,7 +44,6 @@ const addQuestion = (request: any, response: any) => {
       JSON.stringify(newData)
     )
 
-    response.status(200)
     response.send({
       success: true,
       data: newQuestion,
@@ -69,26 +67,11 @@ const addVote = (request: any, response: any) => {
     })
   } else {
     const { _id, vote } = voteReq
-    const question: Question = data.find((x: Question) => x._id === _id)
-
-    let newQuestion: Question
-    switch (vote) {
-      case "up":
-        newQuestion = { ...question, upVote: question.upVote + 1 }
-        break
-      case "down":
-        newQuestion = { ...question, downVote: question.downVote + 1 }
-        break
-      default:
-        newQuestion = question
-        break
-    }
-
-    const newData: Array<Question> = data.map((item) => {
-      if (item._id === _id) {
-        return newQuestion
+    const newData = data.map((question) => {
+      if (question._id === _id && (vote === "up" || vote === "down")) {
+        return { ...question, [`${vote}Vote`]: question[`${vote}Vote`] + 1 }
       }
-      return item
+      return question
     })
 
     fs.writeFileSync(
@@ -96,10 +79,9 @@ const addVote = (request: any, response: any) => {
       JSON.stringify(newData)
     )
 
-    response.status(200)
     response.send({
       success: true,
-      data: newQuestion,
+      data: newData.find((x) => x._id === _id),
     })
   }
 }

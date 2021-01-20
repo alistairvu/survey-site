@@ -29,7 +29,7 @@ const getVote = async (type, id) => {
     const { data } = await res.json()
 
     const { upVote, downVote } = data
-    const upPercent = Math.floor((upVote / (upVote + downVote)) * 10000) / 100
+    const upPercent = (upVote / (upVote + downVote)) * 100
     const downPercent = 100 - upPercent
 
     container.innerHTML = `

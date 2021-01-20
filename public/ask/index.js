@@ -25,8 +25,7 @@ const handleSubmit = async (e) => {
   }
 }
 
-const countChar = (e) => {
-  e.preventDefault()
+const countChar = () => {
   const count = askBox.value.length
   charCount.innerHTML = `${count}/200 characters`
   if (count >= 190) {
@@ -36,5 +35,12 @@ const countChar = (e) => {
   }
 }
 
+const handlePaste = (e) => {
+  let pasteData = (e.clipboardData || window.clipboardData).getData("text")
+  askBox.value = askBox.value + pasteData
+  countChar()
+}
+
 askForm.addEventListener("submit", handleSubmit)
 askBox.addEventListener("keyup", countChar)
+askBox.addEventListener("paste", handlePaste)
