@@ -13,3 +13,8 @@
 #reload-btn {
   background-color: var(--blue)
 }
+
+.confirm-text {
+  text-align: center;
+  padding: 0.5rem;
+}

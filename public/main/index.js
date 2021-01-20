@@ -32,7 +32,10 @@ const getVote = async (type, id) => {
     const upPercent = Math.floor((upVote / (upVote + downVote)) * 10000) / 100
     const downPercent = 100 - upPercent
 
-    container.innerHTML = `<p>Thank you for voting! The question "${questionContent}" has been upvoted ${upVote} ${
+    container.innerHTML = `
+    <div class="confirm-text">
+      <h3>Thank you for voting!</h3> 
+      <p>The question "${questionContent}" has been upvoted ${upVote} ${
       upVote === 1 ? "time" : "times"
     } (<span style="color: rgb(0, ${
       (255 * upPercent) / 100
@@ -41,7 +44,9 @@ const getVote = async (type, id) => {
     } (<span style="color: rgb(${
       (255 * downPercent) / 100
     }, 0, 0);">${downPercent.toFixed(2)}%</span>).</p>
+    </div>
     <button id="reload-btn">New question</button>`
+
     document
       .getElementById("reload-btn")
       .addEventListener("click", () => location.reload())
