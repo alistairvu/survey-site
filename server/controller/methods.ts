@@ -72,13 +72,17 @@ const addVote = (request: any, response: any) => {
     const question: Question = data.find((x: Question) => x._id === _id)
 
     let newQuestion: Question
+    console.log(vote)
     switch (vote) {
       case "up":
         newQuestion = { ...question, upVote: question.upVote + 1 }
+        break
       case "down":
         newQuestion = { ...question, downVote: question.downVote + 1 }
+        break
       default:
-        question
+        newQuestion = question
+        break
     }
 
     const newData: Array<Question> = data.map((item) => {

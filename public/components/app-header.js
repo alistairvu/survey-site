@@ -8,8 +8,8 @@ const styles = `
 .container {
   height: 7vh;
   display: flex;
-  background-color: #36483f;
-  color: #f6f6f7;
+  background-color: #4285f4;
+  color: #f2f2f2;
   align-items: center;
 }
 
