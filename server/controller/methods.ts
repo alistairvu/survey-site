@@ -67,7 +67,7 @@ const addVote = (request: any, response: any) => {
     })
   } else {
     const { _id, vote } = voteReq
-    const newData = data.map((question) => {
+    const newData: Array<Question> = data.map((question: Question) => {
       if (question._id === _id && (vote === "up" || vote === "down")) {
         return { ...question, [`${vote}Vote`]: question[`${vote}Vote`] + 1 }
       }
