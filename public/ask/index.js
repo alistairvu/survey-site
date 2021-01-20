@@ -1,3 +1,4 @@
+import "/components/app-header.js"
 const askForm = document.getElementById("ask-form")
 const askBox = document.getElementById("ask-box")
 const charCount = document.getElementById("char-count")
