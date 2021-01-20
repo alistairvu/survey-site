@@ -41,7 +41,7 @@ const getVote = async (type, id) => {
     } (<span style="color: rgb(${
       (255 * downPercent) / 100
     }, 0, 0);">${downPercent.toFixed(2)}%</span>).</p>
-    <button id="reload-btn">Load another question</button>`
+    <button id="reload-btn">New question</button>`
     document
       .getElementById("reload-btn")
       .addEventListener("click", () => location.reload())

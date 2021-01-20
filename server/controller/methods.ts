@@ -72,7 +72,6 @@ const addVote = (request: any, response: any) => {
     const question: Question = data.find((x: Question) => x._id === _id)
 
     let newQuestion: Question
-    console.log(vote)
     switch (vote) {
       case "up":
         newQuestion = { ...question, upVote: question.upVote + 1 }

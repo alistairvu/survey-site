@@ -1,0 +1,15 @@
+#up-vote, #down-vote {
+  width: 6rem;
+}
+
+#up-vote {
+  background-color: var(--green);
+}
+
+#down-vote {
+  background-color: var(--red);
+}
+
+#reload-btn {
+  background-color: var(--blue)
+}
