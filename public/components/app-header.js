@@ -6,8 +6,27 @@ const styles = `
 }
 
 .container {
+  height: 7vh;
+  display: flex;
   background-color: #36483f;
-  color: #f6f6f7
+  color: #f6f6f7;
+  align-items: center;
+}
+
+.header {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+}
+
+.links {
+  flex: 9;
+}
+
+.link {
+  color: white;
+  text-decoration: none;
+  padding: 10px;
 }
 </style>`
 
@@ -21,9 +40,15 @@ class AppHeader extends HTMLElement {
     this._shadowRoot.innerHTML = `
     ${styles} 
     <div class="container">
-      <h3>Header</h3>
-      <a href="http://localhost:6960">Home</a>
-      <a href="http://localhost:6960/ask">Ask</a>
+      <h3 class="header">
+        <a href="http://localhost:6960" class="link">
+          askme
+        </a>
+      </h3>
+      <div class="links">
+        <a href="http://localhost:6960" class="link">Home</a>
+        <a href="http://localhost:6960/ask" class="link">Ask</a>
+      </div>
     </div>`
   }
 }
