@@ -37,8 +37,8 @@ const countChar = () => {
 
 const handlePaste = (e) => {
   let pasteData = (e.clipboardData || window.clipboardData).getData("text")
-  askBox.value = askBox.value + pasteData
-  countChar()
+  const count = askBox.value.length + pasteData.length
+  charCount.innerHTML = `${count}/200 characters`
 }
 
 askForm.addEventListener("submit", handleSubmit)

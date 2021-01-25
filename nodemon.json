@@ -1,5 +1,5 @@
 {
   "ext": "ts,css,html,js",
   "ignore": ["src/**/*.spec.ts"],
-  "exec": "ts-node --files"
+  "exec": "ts-node --files ./server"
 }
