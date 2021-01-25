@@ -1,18 +1,48 @@
 import "/components/app-header.js"
 const container = document.getElementById("container")
+let id
+
+const fetchQuestion = async () => {
+  try {
+    const res = await fetch("http://localhost:6960/api/get-question")
+    const { data } = await res.json()
+    return data
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+const addEventListeners = () => {
+  const upButton = document.getElementById("up-vote")
+  const downButton = document.getElementById("down-vote")
+  const newButton = document.getElementById("new-question")
+  const resultButton = document.getElementById("results-btn")
+  upButton.addEventListener("click", () => getVote("up", id))
+  downButton.addEventListener("click", () => getVote("down", id))
+  newButton.addEventListener("click", reloadQuestion)
+  resultButton.addEventListener(
+    "click",
+    () => (location.href = `http://localhost:6960/question/${id}`)
+  )
+}
 
 const getQuestion = async () => {
   try {
-    const res = await fetch("http://localhost:6960/get-question")
-    const { data } = await res.json()
+    const data = await fetchQuestion()
     const { _id, content } = data
+    id = _id
 
     container.innerHTML = `<h3 id="question">${content}</h3>
   <div id="results">
-    <button id="up-vote">UP</button>
-    <button id="down-vote">DOWN</button>
+    <div id="vote-btn">
+      <button id="up-vote">UP</button>
+      <button id="down-vote">DOWN</button>
+    </div>
+    <div id="other-btn">
+      <button id="results-btn">View results</button>
+      <button id="new-question">New question</button>
+    </div>
   </div>`
-    return _id
   } catch (error) {
     console.log(error)
   }
@@ -22,7 +52,7 @@ const getVote = async (type, id) => {
   try {
     const questionContent = document.getElementById("question").innerHTML
     const bodyData = { _id: id, vote: type }
-    const res = await fetch("http://localhost:6960/add-vote", {
+    const res = await fetch("http://localhost:6960/api/add-vote", {
       method: "PUT",
       body: new URLSearchParams(bodyData),
     })
@@ -55,13 +85,20 @@ const getVote = async (type, id) => {
   }
 }
 
-const showData = async () => {
-  const id = await getQuestion()
+const reloadQuestion = async () => {
+  try {
+    const { _id, content } = await fetchQuestion()
+    document.getElementById("question").innerHTML = content
+    id = _id
+    addEventListeners()
+  } catch (err) {
+    console.log(err)
+  }
+}
 
-  const upButton = document.getElementById("up-vote")
-  const downButton = document.getElementById("down-vote")
-  upButton.addEventListener("click", () => getVote("up", id))
-  downButton.addEventListener("click", () => getVote("down", id))
+const showData = async () => {
+  await getQuestion()
+  addEventListeners()
 }
 
 showData()

@@ -1,5 +1,10 @@
-import { getRandomQuestion, addQuestion, addVote } from "./controller/methods"
-import { loadMain, loadAsk } from "./controller/render"
+import {
+  getRandomQuestion,
+  addQuestion,
+  addVote,
+  getQuestionById,
+} from "./controller/methods"
+import { loadMain, loadAsk, loadQuestion } from "./controller/render"
 const express = require("express")
 const path = require("path")
 
@@ -13,9 +18,11 @@ app.use(express.static(path.join(__dirname, "../public")))
 
 app.get("/", loadMain)
 app.get("/ask", loadAsk)
-app.get("/get-question", getRandomQuestion)
-app.post("/add-question", addQuestion)
-app.put("/add-vote", addVote)
+app.get("/question/:id", loadQuestion)
+app.get("/api/get-question", getRandomQuestion)
+app.get("/api/get-question/:id", getQuestionById)
+app.post("/api/add-question", addQuestion)
+app.put("/api/add-vote", addVote)
 
 app.listen(port, (err: any) => {
   if (err) throw err

@@ -10,14 +10,13 @@
   background-color: var(--red);
 }
 
-#reload-btn, #results-btn, #new-question {
+#reload-btn {
   background-color: var(--blue)
 }
 
-a {
-  outline: none
+#new-question {
+  background-color: var(--blue)
 }
-
 
 .confirm-text {
   text-align: center;

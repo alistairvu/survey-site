@@ -10,13 +10,16 @@ const handleSubmit = async (e) => {
 
   if (content.trim().length > 0) {
     try {
-      const res = await fetch("http://localhost:6960/add-question", {
+      const res = await fetch("http://localhost:6960/api/add-question", {
         method: "POST",
         body: new URLSearchParams(question),
       })
       const data = await res.json()
       console.log(data)
       alert("Your question has been posted successfully!")
+      // if (res.success) {
+      //   window.location.href = "/"
+      // }
       askForm.reset()
       charCount.innerHTML = `0/200 characters`
     } catch (err) {
@@ -35,12 +38,5 @@ const countChar = () => {
   }
 }
 
-const handlePaste = (e) => {
-  let pasteData = (e.clipboardData || window.clipboardData).getData("text")
-  const count = askBox.value.length + pasteData.length
-  charCount.innerHTML = `${count}/200 characters`
-}
-
 askForm.addEventListener("submit", handleSubmit)
-askBox.addEventListener("keyup", countChar)
-askBox.addEventListener("paste", handlePaste)
+askBox.addEventListener("input", countChar)
