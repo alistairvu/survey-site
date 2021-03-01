@@ -1,85 +1,98 @@
-import "/components/app-header.js"
-const container = document.getElementById("container")
-let id
+// RTK
+const RTK = window.RTK
+const idSlice = RTK.createSlice({
+  name: "id",
+  initialState: "",
+
+  reducers: {
+    setId: (_, action) => action.payload,
+  },
+})
+
+const { setId } = idSlice.actions
+const store = RTK.configureStore({
+  reducer: idSlice.reducer,
+})
+
+// Main app
+const $container = $("#container")
 
 const fetchQuestion = async () => {
   try {
-    const res = await fetch("http://localhost:6960/api/get-question")
-    const { data } = await res.json()
+    const { data } = await $.ajax({
+      type: "GET",
+      url: "/api/random",
+    })
+    console.log(data)
     return data
   } catch (err) {
     console.log(err)
   }
 }
 
+const handleUpVote = () => getVote("up")
+const handleDownVote = () => getVote("down")
+const handleResults = () => (location.href = `api/question/${store.getState()}`)
+
 const addEventListeners = () => {
-  const upButton = document.getElementById("up-vote")
-  const downButton = document.getElementById("down-vote")
-  const newButton = document.getElementById("new-question")
-  const resultButton = document.getElementById("results-btn")
-  upButton.addEventListener("click", () => getVote("up", id))
-  downButton.addEventListener("click", () => getVote("down", id))
-  newButton.addEventListener("click", reloadQuestion)
-  resultButton.addEventListener(
-    "click",
-    () => (location.href = `http://localhost:6960/question/${id}`)
-  )
+  $("#up-vote").click(handleUpVote)
+  $("#down-vote").click(handleDownVote)
+  $("#new-question").click(reloadQuestion)
+  $("#results-btn").click(handleResults)
 }
 
 const getQuestion = async () => {
   try {
     const data = await fetchQuestion()
     const { _id, content } = data
-    id = _id
+    store.dispatch(setId(_id))
 
-    container.innerHTML = `<h3 id="question">${content}</h3>
+    $container.html(`<h3 id="question" class="font-weight-bold">${content}</h3>
   <div id="results">
     <div id="vote-btn">
-      <button id="up-vote">UP</button>
-      <button id="down-vote">DOWN</button>
+      <button id="up-vote" class="btn btn-success">UP</button>
+      <button id="down-vote" class="btn btn-danger">DOWN</button>
     </div>
     <div id="other-btn">
-      <button id="results-btn">View results</button>
-      <button id="new-question">New question</button>
+      <button id="results-btn" class="btn btn-primary">View results</button>
+      <button id="new-question" class="btn btn-primary">New question</button>
     </div>
-  </div>`
+  </div>`)
   } catch (error) {
     console.log(error)
   }
 }
 
-const getVote = async (type, id) => {
+const getVote = async (type) => {
   try {
     const questionContent = document.getElementById("question").innerHTML
-    const bodyData = { _id: id, vote: type }
-    const res = await fetch("http://localhost:6960/api/add-vote", {
-      method: "PUT",
-      body: new URLSearchParams(bodyData),
-    })
-    const { data } = await res.json()
+    const bodyData = { _id: store.getState(), vote: type }
+    console.log(bodyData)
 
-    const { upVote, downVote } = data
-    const upPercent = (upVote / (upVote + downVote)) * 100
+    const { data } = await $.ajax({
+      url: "/api/vote",
+      type: "PUT",
+      data: bodyData,
+    })
+
+    const { upVotes, downVotes } = data
+    const upPercent = (upVotes / (upVotes + downVotes)) * 100
     const downPercent = 100 - upPercent
 
-    container.innerHTML = `
+    $container.html(`
     <div class="confirm-text">
       <h3>Thank you for voting!</h3> 
-      <p>The question "${questionContent}" has been upvoted ${upVote} ${
-      upVote === 1 ? "time" : "times"
-    } (<span style="color: rgb(0, ${
-      (255 * upPercent) / 100
-    }, 0);">${upPercent.toFixed(2)}%</span>) and downvoted ${downVote} ${
-      downVote === 1 ? "time" : "times"
-    } (<span style="color: rgb(${
-      (255 * downPercent) / 100
-    }, 0, 0);">${downPercent.toFixed(2)}%</span>).</p>
+      <p>The question "${questionContent}" has been upvoted ${upVotes} ${
+      upVotes === 1 ? "time" : "times"
+    } (<span style="color: green;">${upPercent.toFixed(
+      2
+    )}%</span>) and downvoted ${downVotes} ${
+      downVotes === 1 ? "time" : "times"
+    } (<span style="color: red;">${downPercent.toFixed(2)}%</span>).</p>
     </div>
-    <button id="reload-btn">New question</button>`
+    <button id="reload-btn" class="btn btn-primary">New question</button>`)
 
-    document
-      .getElementById("reload-btn")
-      .addEventListener("click", () => location.reload())
+    $("#reload-btn").click(() => location.reload())
   } catch (error) {
     console.log(error)
   }
@@ -89,16 +102,13 @@ const reloadQuestion = async () => {
   try {
     const { _id, content } = await fetchQuestion()
     document.getElementById("question").innerHTML = content
-    id = _id
-    addEventListeners()
+    store.dispatch(setId(_id))
   } catch (err) {
     console.log(err)
   }
 }
 
-const showData = async () => {
+$(document).ready(async () => {
   await getQuestion()
   addEventListeners()
-}
-
-showData()
+})

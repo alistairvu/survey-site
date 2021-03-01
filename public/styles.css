@@ -33,3 +33,28 @@ button {
   border: none;
   cursor: pointer; 
 }
+
+#header-container {
+  height: 7vh;
+  display: flex;
+  background-color: #4285f4;
+  color: #f2f2f2;
+  align-items: center;
+}
+
+#header-container .header a {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  font-size: 30px;
+}
+
+#header-container .links {
+  flex: 9;
+}
+
+#header-container .link {
+  color: white;
+  text-decoration: none;
+  padding: 10px;
+}
