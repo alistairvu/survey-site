@@ -5,8 +5,13 @@ import {
   getQuestionById,
 } from "./controller/methods"
 import { loadMain, loadAsk, loadQuestion } from "./controller/render"
-const express = require("express")
-const path = require("path")
+import express from "express"
+import path from "path"
+import connectDB from "./db"
+import dotenv from "dotenv"
+
+dotenv.config()
+connectDB()
 
 const app = express()
 const port: number = 6960
@@ -19,12 +24,11 @@ app.use(express.static(path.join(__dirname, "../public")))
 app.get("/", loadMain)
 app.get("/ask", loadAsk)
 app.get("/question/:id", loadQuestion)
-app.get("/api/get-question", getRandomQuestion)
-app.get("/api/get-question/:id", getQuestionById)
-app.post("/api/add-question", addQuestion)
-app.put("/api/add-vote", addVote)
+app.get("/api/random", getRandomQuestion)
+app.post("/api/questions", addQuestion)
+app.get("/api/questions/:id", getQuestionById)
+app.put("/api/vote", addVote)
 
-app.listen(port, (err: any) => {
-  if (err) throw err
+app.listen(port, () => {
   console.log(`Experience the magic at http://localhost:${port}`)
 })

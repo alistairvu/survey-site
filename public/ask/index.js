@@ -1,27 +1,23 @@
-import "/components/app-header.js"
-const askForm = document.getElementById("ask-form")
-const askBox = document.getElementById("ask-box")
-const charCount = document.getElementById("char-count")
+const $askForm = $("#ask-form")
+const $askBox = $("#ask-box")
+const $charCount = $("#char-count")
 
 const handleSubmit = async (e) => {
   e.preventDefault()
-  const content = askBox.value
+  const content = $askBox.val()
   const question = { content }
 
   if (content.trim().length > 0) {
     try {
-      const res = await fetch("http://localhost:6960/api/add-question", {
+      const res = await fetch("/api/questions", {
         method: "POST",
         body: new URLSearchParams(question),
       })
       const data = await res.json()
       console.log(data)
       alert("Your question has been posted successfully!")
-      // if (res.success) {
-      //   window.location.href = "/"
-      // }
-      askForm.reset()
-      charCount.innerHTML = `0/200 characters`
+      $askForm.get(0).reset()
+      $charCount.html(`0/200 characters`)
     } catch (err) {
       console.log(err)
     }
@@ -29,14 +25,14 @@ const handleSubmit = async (e) => {
 }
 
 const countChar = () => {
-  const count = askBox.value.length
-  charCount.innerHTML = `${count}/200 characters`
+  const count = $askBox.val().length
+  $charCount.html(`<p>${count}/200 characters</p>`)
   if (count >= 190) {
-    charCount.style.color = "red"
+    $charCount.css("color", "red")
   } else {
-    charCount.style.color = "black"
+    $charCount.css("color", "black")
   }
 }
 
-askForm.addEventListener("submit", handleSubmit)
-askBox.addEventListener("input", countChar)
+$askForm.submit(handleSubmit)
+$askBox.on("input", countChar)
