@@ -11,7 +11,7 @@ const idReducer = (state = { id: "" }, action) => {
   }
 }
 
-const idStore = createStore(idReducer, { id: "" })
+const idStore = createStore(idReducer)
 
 const setId = (id) => ({ type: "SET", payload: id })
 
