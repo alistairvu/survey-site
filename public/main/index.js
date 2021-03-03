@@ -1,8 +1,10 @@
 import createStore from "./store.js"
 
+const SET = "SET"
+
 const idReducer = (state = { id: "" }, action) => {
   switch (action.type) {
-    case "SET": {
+    case SET: {
       return { id: action.payload }
     }
     default: {
@@ -13,7 +15,7 @@ const idReducer = (state = { id: "" }, action) => {
 
 const idStore = createStore(idReducer)
 
-const setId = (id) => ({ type: "SET", payload: id })
+const setId = (id) => ({ type: SET, payload: id })
 
 // Main app
 const $container = $("#container")
