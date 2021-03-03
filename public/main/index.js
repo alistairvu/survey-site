@@ -1,4 +1,4 @@
-import createStore from "./store.js"
+import Store from "./store.js"
 
 const SET = "SET"
 
@@ -13,7 +13,7 @@ const idReducer = (state = { id: "" }, action) => {
   }
 }
 
-const idStore = createStore(idReducer)
+const idStore = Store.createStore(idReducer)
 
 const setId = (id) => ({ type: SET, payload: id })
 

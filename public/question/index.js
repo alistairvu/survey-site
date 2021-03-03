@@ -9,19 +9,19 @@ const fetchQuestion = async () => {
     })
 
     if (success) {
-      const { upVote, downVote, content } = data
-      const upPercent = (upVote / (upVote + downVote)) * 100 || 0
+      const { upVotes, downVotes, content } = data
+      const upPercent = (upVotes / (upVotes + downVotes)) * 100 || 0
       const downPercent = 100 - upPercent || 0
 
       $container.html(`
       <div id="container">
     <div class="confirm-text">
-      <p>The question "${content}" has been upvoted ${upVote} ${
-        upVote === 1 ? "time" : "times"
+      <p>The question "${content}" has been upvoted ${upVotes} ${
+        upVotes === 1 ? "time" : "times"
       } (<span style="color: green;">${upPercent.toFixed(
         2
-      )}%</span>) and downvoted ${downVote} ${
-        downVote === 1 ? "time" : "times"
+      )}%</span>) and downvoted ${downVotes} ${
+        downVotes === 1 ? "time" : "times"
       } (<span style="color: red;">${downPercent.toFixed(2)}%</span>).</p>
       <button id="reload-btn" class="btn btn-primary">New question</button>
     </div>

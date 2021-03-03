@@ -1,8 +1,16 @@
-class Store {
-  constructor(reducer, initialState) {
-    this.state = initialState
+export default class Store {
+  constructor(reducer, initialState = null, subscribeFunction = null) {
     this.reducer = reducer
-    this.subscribeFunction = null
+    this.state = initialState
+    this.subscribeFunction = subscribeFunction
+  }
+
+  static createStore = (
+    reducer,
+    initialState = null,
+    subscribeFunction = null
+  ) => {
+    return new Store(reducer, initialState, subscribeFunction)
   }
 
   dispatch(action) {
@@ -26,9 +34,3 @@ class Store {
     this.subscribeFunction = fn
   }
 }
-
-const createStore = (reducer) => {
-  return new Store(reducer)
-}
-
-export default createStore
