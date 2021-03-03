@@ -1,18 +1,19 @@
-// RTK
-const RTK = window.RTK
-const idSlice = RTK.createSlice({
-  name: "id",
-  initialState: "",
+import createStore from "./store.js"
 
-  reducers: {
-    setId: (_, action) => action.payload,
-  },
-})
+const idReducer = (state = { id: "" }, action) => {
+  switch (action.type) {
+    case "SET": {
+      return { id: action.payload }
+    }
+    default: {
+      return state
+    }
+  }
+}
 
-const { setId } = idSlice.actions
-const store = RTK.configureStore({
-  reducer: idSlice.reducer,
-})
+const idStore = createStore(idReducer, { id: "" })
+
+const setId = (id) => ({ type: "SET", payload: id })
 
 // Main app
 const $container = $("#container")
@@ -32,7 +33,8 @@ const fetchQuestion = async () => {
 
 const handleUpVote = () => getVote("up")
 const handleDownVote = () => getVote("down")
-const handleResults = () => (location.href = `api/question/${store.getState()}`)
+const handleResults = () =>
+  (location.href = `/question/${idStore.getState().id}`)
 
 const addEventListeners = () => {
   $("#up-vote").click(handleUpVote)
@@ -45,7 +47,7 @@ const getQuestion = async () => {
   try {
     const data = await fetchQuestion()
     const { _id, content } = data
-    store.dispatch(setId(_id))
+    idStore.dispatch(setId(_id))
 
     $container.html(`<h3 id="question" class="font-weight-bold">${content}</h3>
   <div id="results">
@@ -66,7 +68,7 @@ const getQuestion = async () => {
 const getVote = async (type) => {
   try {
     const questionContent = document.getElementById("question").innerHTML
-    const bodyData = { _id: store.getState(), vote: type }
+    const bodyData = { _id: idStore.getState().id, vote: type }
     console.log(bodyData)
 
     const { data } = await $.ajax({
@@ -102,7 +104,7 @@ const reloadQuestion = async () => {
   try {
     const { _id, content } = await fetchQuestion()
     document.getElementById("question").innerHTML = content
-    store.dispatch(setId(_id))
+    idStore.dispatch(setId(_id))
   } catch (err) {
     console.log(err)
   }
