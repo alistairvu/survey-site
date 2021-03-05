@@ -36,7 +36,7 @@ const fetchQuestion = async () => {
 const handleUpVote = () => getVote("up")
 const handleDownVote = () => getVote("down")
 const handleResults = () =>
-  (location.href = `/question/${idStore.getState().id}`)
+  (location.href = `/question/${idStore.selector((state) => state.id)}`)
 
 const addEventListeners = () => {
   $("#up-vote").click(handleUpVote)
@@ -70,7 +70,7 @@ const getQuestion = async () => {
 const getVote = async (type) => {
   try {
     const questionContent = document.getElementById("question").innerHTML
-    const bodyData = { _id: idStore.getState().id, vote: type }
+    const bodyData = { _id: idStore.selector((state) => state.id), vote: type }
     console.log(bodyData)
 
     const { data } = await $.ajax({
