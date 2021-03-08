@@ -26,14 +26,15 @@ const findQuestion = async (e) => {
   </ul>
   `)
 
-  data.forEach((item) => {
-    const itemHTML = `<li key="${item._id}" class="list-group-item">
+  const itemDomString = data.map((item) => {
+    return `<li key="${item._id}" class="list-group-item">
       ${item.content}
       <span class="badge badge-primary" style="background-color:green;">${item.upVotes}</span>      
       <span class="badge badge-primary" style="background-color:red;">${item.downVotes}</span>
     </li>`
-    $("#results-display").append(itemHTML)
   })
+
+  $("#results-display").html(itemDomString.join(""))
 }
 
 $searchForm.on("submit", findQuestion)
