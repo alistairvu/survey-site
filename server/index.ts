@@ -3,9 +3,20 @@ import {
   addQuestion,
   addVote,
   getQuestionById,
+  teapot,
+  getAllQuestions,
+  deleteQuestionById,
+  getTopQuestion,
+  searchQuestions,
 } from "./controller/methods"
-import { loadMain, loadAsk, loadQuestion } from "./controller/render"
-import express from "express"
+import {
+  loadMain,
+  loadAsk,
+  loadQuestion,
+  loadTeapot,
+  loadSearch,
+} from "./controller/render"
+import express, { Request, Response, NextFunction } from "express"
 import path from "path"
 import connectDB from "./db"
 import dotenv from "dotenv"
@@ -21,13 +32,23 @@ app.use(express.json())
 app.use(express.static("public"))
 app.use(express.static(path.join(__dirname, "../public")))
 
-app.get("/", loadMain)
-app.get("/ask", loadAsk)
-app.get("/question/:id", loadQuestion)
-app.get("/api/random", getRandomQuestion)
-app.post("/api/questions", addQuestion)
-app.get("/api/questions/:id", getQuestionById)
-app.put("/api/vote", addVote)
+app.route("/").get(loadMain)
+app.route("/ask").get(loadAsk)
+app.route("/search").get(loadSearch)
+app.route("/question/:id").get(loadQuestion)
+app.route("/teapot").get(loadTeapot)
+app.route("/api/random").get(getRandomQuestion)
+app.route("/api/questions").post(addQuestion).get(getAllQuestions)
+app.route("/api/questions/top").get(getTopQuestion)
+app.route("/api/questions/search").get(searchQuestions)
+app.route("/api/questions/:id").get(getQuestionById).delete(deleteQuestionById)
+app.route("/api/vote").put(addVote)
+app.route("/api/teapot").get(teapot)
+
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  res.status(err.status || 500)
+  res.json({ success: false, message: err.message })
+})
 
 app.listen(port, () => {
   console.log(`Experience the magic at http://localhost:${port}`)

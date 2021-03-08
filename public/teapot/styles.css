@@ -1,0 +1,34 @@
+#up-vote, #down-vote {
+  width: 6rem;
+}
+
+#up-vote {
+  background-color: var(--green);
+}
+
+#down-vote {
+  background-color: var(--red);
+}
+
+#reload-btn {
+  background-color: var(--blue)
+}
+
+#new-question {
+  background-color: var(--blue)
+}
+
+.confirm-text {
+  text-align: center;
+  padding: 0.5rem;
+}
+
+#results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#other-btn {
+  margin-top: 10px;
+}

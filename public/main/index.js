@@ -43,6 +43,7 @@ const addEventListeners = () => {
   $("#down-vote").click(handleDownVote)
   $("#new-question").click(reloadQuestion)
   $("#results-btn").click(handleResults)
+  $("#delete-btn").click(deleteHandler)
 }
 
 const getQuestion = async () => {
@@ -60,6 +61,7 @@ const getQuestion = async () => {
     <div id="other-btn">
       <button id="results-btn" class="btn btn-primary">View results</button>
       <button id="new-question" class="btn btn-primary">New question</button>
+      <button id="delete-btn" class="btn btn-danger">Delete question</button>
     </div>
   </div>`)
   } catch (error) {
@@ -97,6 +99,25 @@ const getVote = async (type) => {
     <button id="reload-btn" class="btn btn-primary">New question</button>`)
 
     $("#reload-btn").click(() => location.reload())
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const deleteHandler = async () => {
+  try {
+    await $.ajax({
+      url: `/api/questions/${idStore.selector((state) => state.id)}`,
+      type: "DELETE",
+      success: () => {
+        console.log("success")
+        $container.html("<h3>Questions deleted!</h3>")
+      },
+      complete: () => {
+        alert("Deleted!")
+      },
+    })
+    $container.html("<h3>Questions deleted!</h3>")
   } catch (error) {
     console.log(error)
   }

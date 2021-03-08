@@ -1,32 +1,32 @@
 export default class Store {
   constructor(reducer, state = null, subscribeFn = null) {
-    this.reducer = reducer;
-    this.state = state;
-    this.subscribeFn = subscribeFn;
+    this.reducer = reducer
+    this.state = state
+    this.subscribeFn = subscribeFn
   }
 
   // Function to create a new store
   static createStore(reducer, state = null, subscribeFn = null) {
     if (typeof reducer === "object") {
-      return new Store(...reducer, subscribeFn);
+      return new Store(...reducer, subscribeFn)
     }
-    const initialState = reducer(undefined, { type: null });
-    return new Store(reducer, initialState, subscribeFn);
+    const initialState = reducer(undefined, { type: null })
+    return new Store(reducer, initialState, subscribeFn)
   }
 
   // Function to combine reducers
   static combineReducers(reducers) {
-    const initialState = {};
+    const initialState = {}
     for (let reducer in reducers) {
-      initialState[reducer] = reducers[reducer](undefined, { type: null });
+      initialState[reducer] = reducers[reducer](undefined, { type: null })
     }
-    return [reducers, initialState];
+    return [reducers, initialState]
   }
 
   // Dispatching actions
   dispatch(action) {
-    const prevState = this.state;
-    let newState;
+    const prevState = this.state
+    let newState
 
     // If reducer is created through combineReudcers
     if (typeof this.reducer === "object") {
@@ -34,44 +34,44 @@ export default class Store {
         const newReducerState = this.reducer[reducer](
           prevState[reducer],
           action
-        );
+        )
 
         if (typeof prevState[reducer] === "object") {
           newState = {
             ...newState,
-            [reducer]: { ...prevState[reducer], ...newReducerState }
-          };
+            [reducer]: { ...prevState[reducer], ...newReducerState },
+          }
         } else {
-          newState = { ...newState, [reducer]: newReducerState };
+          newState = { ...newState, [reducer]: newReducerState }
         }
       }
     }
-    // If renducer is a function
+    // If reducer is a function
     else {
-      newState = this.reducer(prevState, action);
+      newState = this.reducer(prevState, action)
     }
 
     if (typeof this.state === "object") {
-      this.state = { ...prevState, ...newState };
+      this.state = { ...prevState, ...newState }
     } else {
-      this.state = newState;
+      this.state = newState
     }
 
     if (
       JSON.stringify(this.state) !== JSON.stringify(prevState) &&
       this.subscribeFn
     ) {
-      this.subscribeFn();
+      this.subscribeFn()
     }
   }
 
   // Fire when state changes
   subscribe(fn) {
-    this.subscribeFn = fn;
+    this.subscribeFn = fn
   }
 
   // Selector
   selector(fn) {
-    return fn(this.state);
+    return fn(this.state)
   }
 }
